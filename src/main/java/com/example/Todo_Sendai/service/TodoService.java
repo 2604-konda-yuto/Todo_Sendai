@@ -69,7 +69,7 @@ public class TodoService{
         Todo todo = new Todo();
         todo.setId(reqTodo.getId());
         todo.setContent(reqTodo.getContent());
-        todo.setStatus(todo.getStatus());
+        todo.setStatus(reqTodo.getStatus());
         if (StringUtils.hasText(reqTodo.getLimitDate())) {
             todo.setLimitDate(LocalDate.parse(reqTodo.getLimitDate()).atStartOfDay());
         } else {
