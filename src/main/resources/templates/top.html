@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,21 +8,34 @@
 <div class="header-contents">
     <h1>ToDo</h1>
 </div>
+<div class="today-area">
+    本日の日付：<span th:text="${#temporals.format(today, 'yyyy/MM/dd')}"></span>
+</div>
 <div class="main-contents">
     <a href="/new">
         <button class="new-button" type="button">新規タスク</button>
     </a>
+    <br/>
+    <input type="submit" value="絞込">
+    <br/>
+    タスク内容　　　　ステータス　　　　タスク期限
     <div class="message-icon" th:each="content : ${contents}">
 
-        <div>
-            ID : <span th:text="${content.id}"/>
-        </div>
+
         <div class="text">
-            投稿 : <span th:text="${content.content}"/>
+            <span th:text="${content.content}"/>
+        </div>
+        <select name="pref"></select>
+        <div class="change-button">
+            <input type="button" value="変更">
+        </div>
+        <div class="edit-button">
+            <input type="button" value="編集">
+        </div>
+        <div class="deleteComment-button">
+            <input type="submit" value="削除">
         </div>
     </div>
 </div>
 </body>
 </html>
-=======
->>>>>>> fe50c4c1ca4ae40612b193f72e5749621168e564

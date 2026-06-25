@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import jakarta.persistence.Column;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -28,11 +29,11 @@ public class Todo {
     @Column
     private Integer status;
     @Column
-    private Date limitDate;
+    private LocalDateTime limitDate;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", insertable = false, updatable = false)
     private Date createdDate;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date", insertable = false, updatable = false)
+    @Column(name = "updated_date", insertable = false, updatable = false)
     private Date updatedDate;
 }
