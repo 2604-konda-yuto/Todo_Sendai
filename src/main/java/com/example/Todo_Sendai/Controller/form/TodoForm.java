@@ -16,5 +16,5 @@ public class TodoForm {
     private String content;
     private Integer status = 0;
     private String limitDate;
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
 }
