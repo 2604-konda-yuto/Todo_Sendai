@@ -18,10 +18,11 @@ import java.util.Date;
 @Getter
 @Setter
 public class Todo {
-
     @Id
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column
     private String content;
     @Column

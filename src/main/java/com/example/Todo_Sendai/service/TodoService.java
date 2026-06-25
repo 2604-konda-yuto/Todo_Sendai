@@ -1,31 +1,29 @@
 package com.example.Todo_Sendai.service;
 
-import com.example.Todo_Sendai.controller.form.TodoForm;
+import com.example.Todo_Sendai.Controller.form.TodoForm;
 import com.example.Todo_Sendai.repository.TodoRepository;
 import com.example.Todo_Sendai.repository.entity.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TodoService {
+@Transactional
+public class TodoService{
     @Autowired
     TodoRepository todoRepository;
 
-    /*
-     * レコード全件取得処理
-     */
-    public  List<TodoForm> findAllTodo() {
-        List<Todo> results = todoRepository.findByOrderByLimitDateAsc();
+    public List<TodoForm> findAllTodo() {
+        List<Todo> results = todoRepository.findAll();
         List<TodoForm> todo = setTodoForm(results);
         return todo;
     }
 
-    /*
-     * DBから取得したデータをFormに設定
-     */
     private List<TodoForm> setTodoForm(List<Todo> results) {
         List<TodoForm> reports = new ArrayList<>();
 
@@ -33,30 +31,50 @@ public class TodoService {
             TodoForm todo = new TodoForm();
             Todo result = results.get(i);
             todo.setId(result.getId());
+            todo.setStatus(result.getStatus());
             todo.setContent(result.getContent());
-
+            todo.setLimitDate(todo.getLimitDate());
             reports.add(todo);
         }
         return reports;
     }
 
-    /*
-     * レコード追加
-     */
-    public void saveTodo(TodoForm reqTodo) {
-        Todo saveTodo = setTodoEntity(reqTodo);
-        todoRepository.save(saveTodo);
+    public void deleteTodo(Integer id) {
+        todoRepository.deleteById(id);}
+
+    public TodoForm findById(Integer id) {
+        List<Todo> results = new ArrayList<>();
+        results.add((Todo) todoRepository.findById(id).orElse(null));
+        List<TodoForm> reports = setTodoForm(results);
+        return reports.get(0);
     }
 
-    /*
-     * リクエストから取得した情報をEntityに設定
-     */
+    public void updateStatus(Integer id, Integer statusId) {
+
+    }
+
+    public TodoForm editTodo(Integer id) {
+        List<Todo> results = new ArrayList<>();
+        results.add((Todo) todoRepository.findById(id).orElse(null));
+        List<TodoForm> reports = setTodoForm(results);
+        return reports.get(0);
+    }
+
+    public void updateTodo(TodoForm todo) {
+        Todo report = setTodoEntity(todo);
+        todoRepository.updateTodoContent(report);
+    }
+
     private Todo setTodoEntity(TodoForm reqTodo) {
         Todo todo = new Todo();
+        todo.setId(reqTodo.getId());
         todo.setContent(reqTodo.getContent());
-        todo.setLimitDate(reqTodo.getLimitDate());
-
+        todo.setStatus(todo.getStatus());
+        if (StringUtils.hasText(reqTodo.getLimitDate())) {
+            todo.setLimitDate(LocalDate.parse(reqTodo.getLimitDate()).atStartOfDay());
+        } else {
+            todo.setLimitDate(null); // 入力がない場合はnull
+        }
         return todo;
     }
-
 }

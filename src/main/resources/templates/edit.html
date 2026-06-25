@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <title>編集</title>
+</head>
+<body>
+<div class="header-contents">
+    <h2>編集</h2>
+</div>
+<div class="main-contents">
+    <form th:action="@{/update/{id}(id=${formModel.id})}"  th:object="${formModel}" method="post">
+        <div class="error" th:text="${session.todoerror}"/>
+        <div>
+            <label>タスク内容：</label>
+            <textarea name="content" th:text="${formModel.content}"></textarea>
+        </div>
+        <label>タスク期限：</label>
+        <input type="date" name="limitDate" th:value="${#temporals.format(formModel.limitDate, 'yyyy-MM-dd')}">
+        <button type="submit">更新</button>
+    </form>
+
+</div>
+<div class="footer-contents">
+    <form action="/">
+        <input type="submit" value="戻る" />
+    </form>
+</div>
+</body>
+</html>
