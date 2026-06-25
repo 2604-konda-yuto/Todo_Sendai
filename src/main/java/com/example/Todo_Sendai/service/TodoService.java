@@ -1,6 +1,6 @@
 package com.example.Todo_Sendai.service;
 
-import com.example.Todo_Sendai.controller.form.TodoForm;
+import com.example.Todo_Sendai.Controller.form.TodoForm;
 import com.example.Todo_Sendai.repository.TodoRepository;
 import com.example.Todo_Sendai.repository.entity.Todo;
 import org.springframework.beans.factory.annotation.Autowired;

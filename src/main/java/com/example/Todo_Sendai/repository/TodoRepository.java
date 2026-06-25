@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
+
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Integer> { @Transactional
     @Modifying
@@ -18,5 +20,4 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> { @Transact
     @Modifying
     @Query("UPDATE Todo t SET t.status = :status WHERE t.id = :id") //
     void updateTodoContent(Todo report);
-
 }

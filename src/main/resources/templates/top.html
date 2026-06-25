@@ -1,0 +1,29 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="header-contents">
+    <h1>ToDo</h1>
+</div>
+<div class="main-contents">
+    <a href="/new">
+        <button class="new-button" type="button">新規タスク</button>
+    </a>
+    <div class="message-icon" th:each="content : ${contents}">
+
+        <div>
+            ID : <span th:text="${content.id}"/>
+        </div>
+        <div class="text">
+            投稿 : <span th:text="${content.content}"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+=======
+>>>>>>> fe50c4c1ca4ae40612b193f72e5749621168e564

@@ -1,14 +1,22 @@
 package com.example.Todo_Sendai.repository.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
-import lombok.Data;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+
+import java.util.Date;
 
 @Entity
-@Table(name = "todo")
-@Data
+@Table(name = "tasks")
+@Getter
+@Setter
 public class Todo {
     @Id
     @Column
@@ -17,16 +25,14 @@ public class Todo {
 
     @Column
     private String content;
-
-    @Column(name = "updateDate")
-    private LocalDateTime updateDate;
-
-    @PreUpdate
-    public void preUpdate(){
-        this.updateDate = LocalDateTime.now();
-    }
-    @Column(name = "limitDate")
-    private LocalDateTime limitDate;
     @Column
     private Integer status;
+    @Column
+    private Date limitDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", insertable = false, updatable = false)
+    private Date createdDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", insertable = false, updatable = false)
+    private Date updatedDate;
 }
