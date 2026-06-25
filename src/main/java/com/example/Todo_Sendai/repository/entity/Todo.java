@@ -6,17 +6,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.Column;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name = "tasks")
-@Getter
-@Setter
+@Data
 public class Todo {
     @Id
     @Column
@@ -28,11 +29,11 @@ public class Todo {
     @Column
     private Integer status;
     @Column
-    private Date limitDate;
+    private LocalDateTime limitDate;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date", insertable = false, updatable = false)
-    private Date createdDate;
+    @Column(name = "create_date", insertable = false, updatable = false)
+    private Date createDate;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date", insertable = false, updatable = false)
-    private Date updatedDate;
+    @Column(name = "create_date", insertable = false, updatable = false)
+    private Date updateDate;
 }

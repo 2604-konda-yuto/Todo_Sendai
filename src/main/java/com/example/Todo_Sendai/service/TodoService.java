@@ -1,6 +1,6 @@
 package com.example.Todo_Sendai.service;
 
-import com.example.Todo_Sendai.Controller.form.TodoForm;
+import com.example.Todo_Sendai.controller.form.TodoForm;
 import com.example.Todo_Sendai.repository.TodoRepository;
 import com.example.Todo_Sendai.repository.entity.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +76,19 @@ public class TodoService{
             todo.setLimitDate(null); // 入力がない場合はnull
         }
         return todo;
+    }
+
+    public void saveTodo(TodoForm reqTodo) {
+        Todo saveTodo = setTodoEntity(reqTodo);
+
+        if (saveTodo.getLimitDate() != null) {
+            java.time.LocalDate dateOnly = saveTodo.getLimitDate().toLocalDate();
+            saveTodo.setLimitDate(dateOnly.atTime(23, 59, 59));
+        }
+        if(saveTodo.getStatus() == null){
+            saveTodo.setStatus(1);
+        }
+
+        todoRepository.save(saveTodo);
     }
 }

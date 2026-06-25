@@ -28,6 +28,37 @@ public class TodoController {
         mav.addObject("contents", contentData);
         return mav;
     }
+    @GetMapping("/new")
+    public ModelAndView newtodo(HttpSession session) {
+        String todoerror = (String) session.getAttribute("todoerror");
+        session.removeAttribute("todoerror");
+        ModelAndView mav = new ModelAndView();
+        // form用の空のentityを準備
+        TodoForm todoForm = new TodoForm();
+        // 画面遷移先を指定
+        mav.setViewName("/new");
+        mav.addObject("todoerror", todoerror);
+        // 準備した空のFormを保管
+        mav.addObject("formModel", todoForm);
+        return mav;
+    }
+    @PostMapping("/add")
+    public ModelAndView addTodo(@ModelAttribute("formModel") TodoForm todoForm, HttpSession session) {
+        if (!StringUtils.hasText(todoForm.getContent())) {
+            session.setAttribute("todoerror", "投稿内容を記入してください");
+            return new ModelAndView("/new");
+        } else if (todoForm.getContent().length() > 255) {
+            session.setAttribute("todoerror", "投稿内容は255文字以内で入力してください");
+            return new ModelAndView("/new");
+        } else if (todoForm.getLimitDate().isBlank()) {
+            session.setAttribute("todoerror", "期限を入力してください");
+            return new ModelAndView("/new");
+        }
+        // 投稿をテーブルに格納
+        todoService.saveTodo(todoForm);
+        // rootへリダイレクト
+        return new ModelAndView("redirect:/");
+    }
 
     @DeleteMapping("/delete/{id}")
     public ModelAndView deleteTodo(@PathVariable Integer id) {
