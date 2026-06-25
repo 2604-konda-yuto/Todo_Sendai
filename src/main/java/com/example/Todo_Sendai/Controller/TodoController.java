@@ -10,6 +10,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -18,10 +20,12 @@ public class TodoController {
     private TodoService todoService;
 
     @GetMapping
-    public ModelAndView top() {
+    public ModelAndView top() throws ParseException {
         ModelAndView mav = new ModelAndView();
         // 投稿を全件取得
         List<TodoForm> contentData = todoService.findAllTodo();
+        LocalDate today = LocalDate.now();
+        mav.addObject("today", today);
         // 画面遷移先を指定
         mav.setViewName("/top");
         // 投稿データオブジェクトを保管
