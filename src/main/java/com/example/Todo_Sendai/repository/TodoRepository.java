@@ -18,6 +18,7 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> { @Transact
     @Query("UPDATE Todo t SET t.status = :status WHERE t.id = :id") // 実際の変数名に合わせて調整してください
     void updateTodo(@Param("id") Integer id, @Param("status") Integer status);
     @Modifying
-    @Query("UPDATE Todo t SET t.status = :status WHERE t.id = :id") //
+    @Query("UPDATE Todo t SET t.content = :status, t.limitDate = :limitDate WHERE t.id = :id") //
     void updateTodoContent(Todo report);
+
 }

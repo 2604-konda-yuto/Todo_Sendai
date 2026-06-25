@@ -31,9 +31,9 @@ public class Todo {
     @Column
     private LocalDateTime limitDate;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date", insertable = false, updatable = false)
-    private Date createdDate;
+    @Column(name = "create_date", insertable = false, updatable = false)
+    private Date createDate;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_date", insertable = false, updatable = false)
-    private Date updatedDate;
+    @Column(name = "create_date", insertable = false, updatable = false)
+    private Date updateDate;
 }
