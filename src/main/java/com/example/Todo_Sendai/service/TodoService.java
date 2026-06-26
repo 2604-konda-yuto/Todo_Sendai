@@ -32,7 +32,7 @@ public class TodoService {
         if (StringUtils.hasText(endDate)) {
             end = LocalDate.parse(endDate).atTime(23, 59, 59);
         } else {
-            end = LocalDateTime.now();
+            end = LocalDateTime.of(2099, 12, 31, 23, 59, 59);
         }
 
         String search = StringUtils.hasText(task) ? task : "";

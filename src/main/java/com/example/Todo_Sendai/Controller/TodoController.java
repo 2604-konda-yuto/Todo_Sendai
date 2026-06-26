@@ -18,10 +18,13 @@ public class TodoController {
     @Autowired
     private TodoService todoService;
 
+    /*
+     *投稿内容表示処理
+     */
     @GetMapping
     public ModelAndView top(@RequestParam(name = "startDate", required = false) String startDate,
                             @RequestParam(name = "endDate", required = false) String endDate,
-                            @RequestParam(name = "status", required = false) Integer status, // 追加
+                            @RequestParam(name = "status", required = false) Integer status,
                             @RequestParam(name = "task", required = false) String task) throws ParseException {
         ModelAndView mav = new ModelAndView();
         // 投稿を全件取得
@@ -37,6 +40,9 @@ public class TodoController {
         return mav;
     }
 
+    /*
+     *新規投稿画面表示
+     */
     @GetMapping("/new")
     public ModelAndView newtodo(HttpSession session) {
         String todoerror = (String) session.getAttribute("todoerror");
@@ -52,6 +58,9 @@ public class TodoController {
         return mav;
     }
 
+    /*
+     *新規投稿処理
+     */
     @PostMapping("/add")
     public ModelAndView addTodo(@ModelAttribute("formModel") TodoForm todoForm, HttpSession session) {
         if (!StringUtils.hasText(todoForm.getContent())) {
@@ -70,6 +79,9 @@ public class TodoController {
         return new ModelAndView("redirect:/");
     }
 
+    /*
+     *投稿削除処理
+     */
     @DeleteMapping("/delete/{id}")
     public ModelAndView deleteTodo(@PathVariable Integer id) {
         todoService.deleteTodo(id);
@@ -86,6 +98,9 @@ public class TodoController {
         return new ModelAndView("redirect:/");
     }
 
+    /*
+     *編集画面表示処理
+     */
     @GetMapping("/edit/{id}")
     public ModelAndView editContent(@PathVariable Integer id, HttpSession session) {
         String todoerror = (String) session.getAttribute("todoerror");
@@ -100,6 +115,9 @@ public class TodoController {
         return mav;
     }
 
+    /*
+     *編集処理
+     */
     @PostMapping("/update/{id}")
     public ModelAndView updateContent(
             @PathVariable Integer id,
