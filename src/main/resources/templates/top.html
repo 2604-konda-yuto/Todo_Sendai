@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 <div class="header-contents">
@@ -18,6 +19,26 @@
     <button class="new-button" type="button">新規タスク</button>
 </a>
 <div class="main-contents">
+    <form method="get" th:action="@{/}">
+        期限
+        <input type="date" name="startDate" th:value="${startDate}">
+        ～
+        <input type="date" name="endDate" th:value="${endDate}">
+
+        <label>ステータス</label>
+        <select name="status">
+            <option value="">▼</option>
+            <option value="1" th:selected="${selectedStatus == 1}">未着手</option>
+            <option value="2" th:selected="${selectedStatus == 2}">実行中</option>
+            <option value="3" th:selected="${selectedStatus == 3}">ステイ中</option>
+            <option value="4" th:selected="${selectedStatus == 4}">完了</option>
+        </select>
+
+        <label>タスク内容</label>
+        <input type="text" name="task">
+
+        <input type="submit" value="絞込">
+    </form>
     <table>
         <thead>
         <tr>

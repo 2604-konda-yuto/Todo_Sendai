@@ -1,0 +1,23 @@
+.form-body {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.error-container {
+    margin-bottom: 20px;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 4px 0;
+}
+
+.textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 14px;
+}

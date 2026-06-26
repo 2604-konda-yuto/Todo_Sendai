@@ -8,18 +8,42 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
-public class TodoService{
+public class TodoService {
     @Autowired
     TodoRepository todoRepository;
 
-    public List<TodoForm> findAllTodo() {
-        List<Todo> results = todoRepository.findAll();
+    public List<TodoForm> findAllTodo(String startDate, String endDate, Integer status, String task) throws ParseException {
+        LocalDateTime start;
+        LocalDateTime end;
+
+        if (StringUtils.hasText(startDate)) {
+            start = LocalDate.parse(startDate).atStartOfDay();
+        } else {
+            start = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+        }
+        if (StringUtils.hasText(endDate)) {
+            end = LocalDate.parse(endDate).atTime(23, 59, 59);
+        } else {
+            end = LocalDateTime.of(2099, 12, 31, 23, 59, 59);
+        }
+
+        String search = StringUtils.hasText(task) ? task : "";
+
+        List<Todo> results;
+
+        if (status != null) {
+            results = todoRepository.findByLimitDateBetweenAndStatusAndContentContaining(start, end, status, task);
+        } else {
+            results = todoRepository.findByLimitDateBetweenAndContentContaining(start, end, task);
+        }
         List<TodoForm> todo = setTodoForm(results);
         return todo;
     }
@@ -27,22 +51,24 @@ public class TodoService{
     private List<TodoForm> setTodoForm(List<Todo> results) {
         List<TodoForm> reports = new ArrayList<>();
 
-        for (Todo result : results) {
-            TodoForm form = new TodoForm();
-            form.setId(result.getId());
-            form.setContent(result.getContent());
-
+        for (int i = 0; i < results.size(); i++) {
+            TodoForm todo = new TodoForm();
+            Todo result = results.get(i);
+            todo.setId(result.getId());
+            todo.setStatus(result.getStatus());
+            todo.setContent(result.getContent());
             if (result.getLimitDate() != null) {
-                form.setLimitDate(result.getLimitDate().toString());
+                todo.setLimitDate(result.getLimitDate().toLocalDate().toString());
             }
-
-            reports.add(form);
+            todo.setLimitDate(todo.getLimitDate());
+            reports.add(todo);
         }
         return reports;
     }
 
     public void deleteTodo(Integer id) {
-        todoRepository.deleteById(id);}
+        todoRepository.deleteById(id);
+    }
 
     public TodoForm findById(Integer id) {
         List<Todo> results = new ArrayList<>();
@@ -63,13 +89,8 @@ public class TodoService{
     }
 
     public void updateTodo(TodoForm todo) {
-        Todo updateTodo = setTodoEntity(todo);
-        // 引数を個別に分解して渡す
-        todoRepository.updateTodoContent(
-                updateTodo.getId(),
-                updateTodo.getContent(),
-                updateTodo.getLimitDate()
-        );
+        Todo report = setTodoEntity(todo);
+        todoRepository.updateTodoContent(report);
     }
 
     private Todo setTodoEntity(TodoForm reqTodo) {
@@ -93,7 +114,6 @@ public class TodoService{
             java.time.LocalDate dateOnly = saveTodo.getLimitDate().toLocalDate();
             saveTodo.setLimitDate(dateOnly.atTime(23, 59, 59));
         }
-
         if (saveTodo.getStatus() == null) {
             saveTodo.setStatus(1);
         }
