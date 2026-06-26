@@ -14,7 +14,7 @@ import java.util.Date;
 public class TodoForm {
     private Integer id;
     private String content;
-    private Integer status = 0;
+    private Integer status = 1;
     private String limitDate;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;

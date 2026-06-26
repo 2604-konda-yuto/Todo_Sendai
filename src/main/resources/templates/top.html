@@ -19,7 +19,7 @@
     <button class="new-button" type="button">新規タスク</button>
 </a>
 <div class="main-contents">
-    <form method="get" th:action="@{/}">
+    <form method="get" th:action="@{/Filter}">
         期限
         <input type="date" name="startDate" th:value="${startDate}">
         ～
@@ -29,7 +29,7 @@
         <select name="status">
             <option value="">▼</option>
             <option value="1" th:selected="${selectedStatus == 1}">未着手</option>
-            <option value="2" th:selected="${selectedStatus == 2}">実行中</option>
+            <option value="2" th:selected="${selectedStatus == 2}">進行中</option>
             <option value="3" th:selected="${selectedStatus == 3}">ステイ中</option>
             <option value="4" th:selected="${selectedStatus == 4}">完了</option>
         </select>
@@ -57,17 +57,17 @@
                     <form th:action="@{/status/update/{id}(id=${content.id})}" method="post">
                         <input type="hidden" name="id" th:value="${content.id}">
                         <select name="status">
-                            <option value="0" th:selected="${content.status == 0}">未着手</option>
-                            <option value="1" th:selected="${content.status == 1}">進行中</option>
-                            <option value="2" th:selected="${content.status == 2}">ステイ中</option>
-                            <option value="3" th:selected="${content.status == 3}">完了</option>
+                            <option value="1" th:selected="${content.status == 1}">未着手</option>
+                            <option value="2" th:selected="${content.status == 2}">進行中</option>
+                            <option value="3" th:selected="${content.status == 3}">ステイ中</option>
+                            <option value="4" th:selected="${content.status == 4}">完了</option>
                         </select>
                         <button type="submit">変更</button>
                     </form>
                 </div>
             </td>
             <td th:text="${content.limitDate != null && content.limitDate != '' ? content.limitDate : '期限なし'}"
-                th:classappend="${content.limitDate != null && content.limitDate != '' ? (content.limitDate.toString().compareTo(today.toString()) &lt;= 0 ? 'date-red' : 'date-yellow') : ''}">
+                th:classappend="${content.limitDate != null && content.limitDate != '' ? (content.limitDate.toString().compareTo(today.toString()) &lt; 0 ? 'date-red' : 'date-yellow') : ''}">
             </td>
             <td>
                 <button th:onclick="|location.href='@{/edit/{id}(id=${content.id})}'|">編集</button>

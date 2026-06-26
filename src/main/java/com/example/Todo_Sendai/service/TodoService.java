@@ -20,30 +20,8 @@ public class TodoService {
     @Autowired
     TodoRepository todoRepository;
 
-    public List<TodoForm> findAllTodo(String startDate, String endDate, Integer status, String task) throws ParseException {
-        LocalDateTime start;
-        LocalDateTime end;
-
-        if (StringUtils.hasText(startDate)) {
-            start = LocalDate.parse(startDate).atStartOfDay();
-        } else {
-            start = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
-        }
-        if (StringUtils.hasText(endDate)) {
-            end = LocalDate.parse(endDate).atTime(23, 59, 59);
-        } else {
-            end = LocalDateTime.of(2099, 12, 31, 23, 59, 59);
-        }
-
-        String search = StringUtils.hasText(task) ? task : "";
-
-        List<Todo> results;
-
-        if (status != null) {
-            results = todoRepository.findByLimitDateBetweenAndStatusAndContentContaining(start, end, status, task);
-        } else {
-            results = todoRepository.findByLimitDateBetweenAndContentContaining(start, end, task);
-        }
+    public List<TodoForm> findAllTodo() throws ParseException {
+        List<Todo> results = todoRepository.findAllByOrderByLimitDateAsc();
         List<TodoForm> todo = setTodoForm(results);
         return todo;
     }
@@ -78,7 +56,7 @@ public class TodoService {
     }
 
     public void updateStatus(Integer id, Integer statusId) {
-
+        todoRepository.updateTodo(id, statusId);
     }
 
     public TodoForm editTodo(Integer id) {
@@ -89,8 +67,12 @@ public class TodoService {
     }
 
     public void updateTodo(TodoForm todo) {
-        Todo report = setTodoEntity(todo);
-        todoRepository.updateTodoContent(report);
+        Todo updateTodo = setTodoEntity(todo);
+        todoRepository.updateTodoContent(
+                updateTodo.getId(),
+                updateTodo.getContent(),
+                updateTodo.getLimitDate()
+        );
     }
 
     private Todo setTodoEntity(TodoForm reqTodo) {
@@ -119,5 +101,33 @@ public class TodoService {
         }
 
         todoRepository.save(saveTodo);
+    }
+
+    public List<TodoForm> findFilterTodo(String startDate, String endDate, Integer status, String task) {
+        LocalDateTime start;
+        LocalDateTime end;
+
+        if (StringUtils.hasText(startDate)) {
+            start = LocalDate.parse(startDate).atStartOfDay();
+        } else {
+            start = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+        }
+        if (StringUtils.hasText(endDate)) {
+            end = LocalDate.parse(endDate).atTime(23, 59, 59);
+        } else {
+            end = LocalDateTime.of(2099, 12, 31, 23, 59, 59);
+        }
+
+        String search = StringUtils.hasText(task) ? task : "";
+
+        List<Todo> results;
+
+        if (status != null) {
+            results = todoRepository.findByLimitDateBetweenAndStatusAndContentContaining(start, end, status, task);
+        } else {
+            results = todoRepository.findByLimitDateBetweenAndContentContaining(start, end, task);
+        }
+        List<TodoForm> todo = setTodoForm(results);
+        return todo;
     }
 }

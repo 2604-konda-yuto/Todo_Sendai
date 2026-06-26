@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
     <title>編集</title>
 </head>
 <body>
@@ -19,7 +19,7 @@
             <textarea name="content" th:text="${formModel.content}"></textarea>
         </div>
         <label>タスク期限：</label>
-        <input type="date" name="limitDate" th:value="${#temporals.format(formModel.limitDate, 'yyyy-MM-dd')}">
+        <input type="date" name="limitDate" th:value="${formModel.limitDate}" />
         <button type="submit">更新</button>
     </form>
 
