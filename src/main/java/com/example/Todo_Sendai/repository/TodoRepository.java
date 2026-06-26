@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -20,5 +22,12 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> { @Transact
     @Modifying
     @Query("UPDATE Todo t SET t.content = :status, t.limitDate = :limitDate WHERE t.id = :id") //
     void updateTodoContent(Todo report);
-
+    public List<Todo> findByLimitDateBetweenAndStatusAndContentContaining
+            (LocalDateTime start, LocalDateTime end,
+             Integer status, String content);
+    public List<Todo> findByLimitDateBetweenAndContentContaining(
+            LocalDateTime start,
+            LocalDateTime end,
+            String content
+    );
 }

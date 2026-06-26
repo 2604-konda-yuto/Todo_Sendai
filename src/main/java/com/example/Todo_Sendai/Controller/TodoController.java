@@ -19,18 +19,24 @@ public class TodoController {
     private TodoService todoService;
 
     @GetMapping
-    public ModelAndView top() throws ParseException {
+    public ModelAndView top(@RequestParam(name = "startDate", required = false) String startDate,
+                            @RequestParam(name = "endDate", required = false) String endDate,
+                            @RequestParam(name = "status", required = false) Integer status, // 追加
+                            @RequestParam(name = "task", required = false) String task) throws ParseException {
         ModelAndView mav = new ModelAndView();
         // 投稿を全件取得
-        List<TodoForm> contentData = todoService.findAllTodo();
+        List<TodoForm> contentData = todoService.findAllTodo(startDate, endDate, status, task);
         LocalDate today = LocalDate.now();
         mav.addObject("today", today);
         // 画面遷移先を指定
         mav.setViewName("/top");
         // 投稿データオブジェクトを保管
+        mav.addObject("startDate", startDate);
+        mav.addObject("endDate", endDate);
         mav.addObject("contents", contentData);
         return mav;
     }
+
     @GetMapping("/new")
     public ModelAndView newtodo(HttpSession session) {
         String todoerror = (String) session.getAttribute("todoerror");
@@ -45,6 +51,7 @@ public class TodoController {
         mav.addObject("formModel", todoForm);
         return mav;
     }
+
     @PostMapping("/add")
     public ModelAndView addTodo(@ModelAttribute("formModel") TodoForm todoForm, HttpSession session) {
         if (!StringUtils.hasText(todoForm.getContent())) {

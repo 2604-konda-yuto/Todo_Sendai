@@ -34,6 +34,6 @@ public class Todo {
     @Column(name = "created_date", insertable = false, updatable = false)
     private Date createdDate;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date", insertable = false, updatable = false)
+    @Column(name = "updated_date", insertable = false, updatable = false)
     private Date updatedDate;
 }
