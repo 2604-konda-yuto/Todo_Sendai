@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
@@ -9,7 +10,9 @@
 <div class="header-contents">
     <h2>タスク追加</h2>
 </div>
-
+<div th:if="${todoerror}" class="errorMsessage">
+    <p th:text="${todoerror}"></p>
+</div>
 <div class="main-contents">
     <form method="post" action="/add" th:object="${formModel}">
         <div class="form-area">

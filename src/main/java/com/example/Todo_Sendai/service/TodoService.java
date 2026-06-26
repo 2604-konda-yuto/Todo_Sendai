@@ -27,14 +27,16 @@ public class TodoService{
     private List<TodoForm> setTodoForm(List<Todo> results) {
         List<TodoForm> reports = new ArrayList<>();
 
-        for (int i = 0; i < results.size(); i++) {
-            TodoForm todo = new TodoForm();
-            Todo result = results.get(i);
-            todo.setId(result.getId());
-            todo.setStatus(result.getStatus());
-            todo.setContent(result.getContent());
-            todo.setLimitDate(todo.getLimitDate());
-            reports.add(todo);
+        for (Todo result : results) {
+            TodoForm form = new TodoForm();
+            form.setId(result.getId());
+            form.setContent(result.getContent());
+
+            if (result.getLimitDate() != null) {
+                form.setLimitDate(result.getLimitDate().toString());
+            }
+
+            reports.add(form);
         }
         return reports;
     }
@@ -61,8 +63,13 @@ public class TodoService{
     }
 
     public void updateTodo(TodoForm todo) {
-        Todo report = setTodoEntity(todo);
-        todoRepository.updateTodoContent(report);
+        Todo updateTodo = setTodoEntity(todo);
+        // 引数を個別に分解して渡す
+        todoRepository.updateTodoContent(
+                updateTodo.getId(),
+                updateTodo.getContent(),
+                updateTodo.getLimitDate()
+        );
     }
 
     private Todo setTodoEntity(TodoForm reqTodo) {
@@ -82,10 +89,12 @@ public class TodoService{
         Todo saveTodo = setTodoEntity(reqTodo);
 
         if (saveTodo.getLimitDate() != null) {
+
             java.time.LocalDate dateOnly = saveTodo.getLimitDate().toLocalDate();
             saveTodo.setLimitDate(dateOnly.atTime(23, 59, 59));
         }
-        if(saveTodo.getStatus() == null){
+
+        if (saveTodo.getStatus() == null) {
             saveTodo.setStatus(1);
         }
 

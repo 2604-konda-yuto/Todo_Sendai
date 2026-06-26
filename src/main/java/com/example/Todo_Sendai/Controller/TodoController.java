@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -47,24 +49,33 @@ public class TodoController {
         return mav;
     }
     @PostMapping("/add")
-    public ModelAndView addTodo(@ModelAttribute("formModel") TodoForm todoForm, HttpSession session) {
+    public ModelAndView addTodo(@ModelAttribute("formModel") TodoForm todoForm) {
         if (!StringUtils.hasText(todoForm.getContent())) {
-            session.setAttribute("todoerror", "投稿内容を記入してください");
-            return new ModelAndView("/new");
-        } else if (todoForm.getContent().length() > 255) {
-            session.setAttribute("todoerror", "投稿内容は255文字以内で入力してください");
-            return new ModelAndView("/new");
-        } else if (todoForm.getLimitDate().isBlank()) {
-            session.setAttribute("todoerror", "期限を入力してください");
-            return new ModelAndView("/new");
+            ModelAndView mav = new ModelAndView("/new");
+            mav.addObject("todoerror", "投稿内容を記入してください");
+            mav.addObject("formModel", todoForm);
+            return mav;
         }
-        // 投稿をテーブルに格納
+
+        if (todoForm.getContent().length() > 255) {
+            ModelAndView mav = new ModelAndView("/new");
+            mav.addObject("todoerror", "投稿内容は255文字以内で入力してください");
+            mav.addObject("formModel", todoForm);
+            return mav;
+        }
+
+        if (todoForm.getLimitDate() == null || todoForm.getLimitDate().isBlank()) {
+            ModelAndView mav = new ModelAndView("/new");
+            mav.addObject("todoerror", "期限を入力してください");
+            mav.addObject("formModel", todoForm);
+            return mav;
+        }
+
         todoService.saveTodo(todoForm);
-        // rootへリダイレクト
         return new ModelAndView("redirect:/");
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public ModelAndView deleteTodo(@PathVariable Integer id) {
         todoService.deleteTodo(id);
         return new ModelAndView("redirect:/");
@@ -98,25 +109,31 @@ public class TodoController {
     public ModelAndView updateContent(
             @PathVariable Integer id,
             @ModelAttribute("formModel") TodoForm todo,
-            HttpSession session
+            RedirectAttributes redirectAttributes
     ) {
 
         if (todo.getLimitDate() == null || todo.getLimitDate().isBlank()) {
-            session.setAttribute("todoerror", "期限を入力してください");
+            redirectAttributes.addFlashAttribute("todoerror", "期限を入力してください"); // ★変更
             return new ModelAndView("redirect:/edit/" + id);
         }
 
         if (!StringUtils.hasText(todo.getContent())) {
-            session.setAttribute("todoerror", "投稿内容を記入してください");
+            redirectAttributes.addFlashAttribute("todoerror", "投稿内容を記入してください"); // ★変更
             return new ModelAndView("redirect:/edit/" + id);
         }
 
         if (todo.getContent().length() > 255) {
-            session.setAttribute("todoerror", "投稿内容は255文字以内で入力してください");
+            redirectAttributes.addFlashAttribute("todoerror", "投稿内容は255文字以内で入力してください"); // ★変更
             return new ModelAndView("redirect:/edit/" + id);
         }
+
         todo.setId(id);
         todoService.updateTodo(todo);
+        return new ModelAndView("redirect:/");
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ModelAndView handleTypeMismatchException(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("todoerror", "不正なパラメータです。");
         return new ModelAndView("redirect:/");
     }
 }

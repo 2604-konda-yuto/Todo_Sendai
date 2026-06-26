@@ -8,33 +8,58 @@
 <div class="header-contents">
     <h1>ToDo</h1>
 </div>
+<div th:if="${todoerror}" class="errorMsessage">
+    <p th:text="${todoerror}"></p>
+</div>
 <div class="today-area">
     本日の日付：<span th:text="${#temporals.format(today, 'yyyy/MM/dd')}"></span>
 </div>
+<a href="/new">
+    <button class="new-button" type="button">新規タスク</button>
+</a>
 <div class="main-contents">
-    <a href="/new">
-        <button class="new-button" type="button">新規タスク</button>
-    </a>
-    <br/>
-    <input type="submit" value="絞込">
-    <br/>
-    タスク内容　　　　ステータス　　　　タスク期限
-    <div class="message-icon" th:each="content : ${contents}">
-
-
-        <div class="text">
-            <span th:text="${content.content}"/>
-        </div>
-        <div class="change-button">
-            <input type="button" value="変更">
-        </div>
-        <div class="edit-button">
-            <input type="button" value="編集">
-        </div>
-        <div class="deleteComment-button">
-            <input type="submit" value="削除">
-        </div>
-    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>タスク内容</th>
+            <th>ステータス変更</th>
+            <th>タスク期限</th>
+            <th>編集</th>
+            <th>削除</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="content : ${contents}">
+            <td th:text="${content.content}"></td>
+            <td>
+                <div class="status">
+                    <form th:action="@{/status/update/{id}(id=${content.id})}" method="post">
+                        <input type="hidden" name="id" th:value="${content.id}">
+                        <select name="status">
+                            <option value="0" th:selected="${content.status == 0}">未着手</option>
+                            <option value="1" th:selected="${content.status == 1}">進行中</option>
+                            <option value="2" th:selected="${content.status == 2}">ステイ中</option>
+                            <option value="3" th:selected="${content.status == 3}">完了</option>
+                        </select>
+                        <button type="submit">変更</button>
+                    </form>
+                </div>
+            </td>
+            <td th:text="${content.limitDate != null && content.limitDate != '' ? content.limitDate : '期限なし'}"
+                th:classappend="${content.limitDate != null && content.limitDate != '' ? (content.limitDate.toString().compareTo(today.toString()) &lt;= 0 ? 'date-red' : 'date-yellow') : ''}">
+            </td>
+            <td>
+                <button th:onclick="|location.href='@{/edit/{id}(id=${content.id})}'|">編集</button>
+            </td>
+            <td>
+                <form th:action="@{/delete/{id}(id=${content.id})}" method="post" style="display:inline;"
+                      th:onsubmit="return confirm('本当に削除しますか？');">
+                    <button type="submit">削除</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

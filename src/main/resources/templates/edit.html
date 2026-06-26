@@ -11,7 +11,9 @@
 </div>
 <div class="main-contents">
     <form th:action="@{/update/{id}(id=${formModel.id})}"  th:object="${formModel}" method="post">
-        <div class="error" th:text="${session.todoerror}"/>
+        <div th:if="${todoerror}" class="errorMsessage">
+            <p th:text="${todoerror}"></p>
+        </div>
         <div>
             <label>タスク内容：</label>
             <textarea name="content" th:text="${formModel.content}"></textarea>
