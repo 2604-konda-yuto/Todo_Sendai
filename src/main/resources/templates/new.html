@@ -19,7 +19,7 @@
             <label>タスク内容</label><br/>
             <textarea class="tweet-box" th:field="*{content}" size="20" maxlength="200"/></textarea><br/>
             <label>タスク期限</label><br/>
-            <input type="date" class="tweet-box" th:field="*{limitDate}"/><br/>
+            <input type="date" th:field="*{limitDate}"/><br/>
             <input type="submit" value="追加"/>
         </div>
     </form>

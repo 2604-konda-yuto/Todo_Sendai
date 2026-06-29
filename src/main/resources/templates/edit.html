@@ -16,7 +16,7 @@
         </div>
         <div>
             <label>タスク内容：</label>
-            <textarea name="content" th:text="${formModel.content}"></textarea>
+            <textarea class="tweet-box" name="content" th:text="${formModel.content}"></textarea>
         </div>
         <label>タスク期限：</label>
         <input type="date" name="limitDate" th:value="${formModel.limitDate}" />
