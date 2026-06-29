@@ -10,7 +10,7 @@
     <h2>編集</h2>
 </div>
 <div class="main-contents">
-    <form th:action="@{/update/{id}(id=${formModel.id})}"  th:object="${formModel}" method="post">
+    <form th:action="@{/update/{id}(id=${formModel.id})}" th:object="${formModel}" method="post">
         <div th:if="${todoerror}" class="errorMsessage">
             <p th:text="${todoerror}"></p>
         </div>
@@ -19,14 +19,14 @@
             <textarea class="tweet-box" name="content" th:text="${formModel.content}"></textarea>
         </div>
         <label>タスク期限：</label>
-        <input type="date" name="limitDate" th:value="${formModel.limitDate}" />
+        <input type="date" name="limitDate" th:value="${formModel.limitDate}"/>
         <button type="submit">更新</button>
     </form>
 
 </div>
 <div class="footer-contents">
     <form action="/">
-        <input type="submit" value="戻る" />
+        <input type="submit" value="戻る"/>
     </form>
 </div>
 </body>

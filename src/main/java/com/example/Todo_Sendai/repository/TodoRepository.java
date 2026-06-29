@@ -15,10 +15,12 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface TodoRepository extends JpaRepository<Todo, Integer> { @Transactional
+public interface TodoRepository extends JpaRepository<Todo, Integer> {
+    @Transactional
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Todo t SET t.status = :status WHERE t.id = :id")
     void updateTodo(@Param("id") Integer id, @Param("status") Integer status);
+
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Todo t SET t.content = :content, t.limitDate = :limitDate WHERE t.id = :id")
     void updateTodoContent(
@@ -26,12 +28,14 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> { @Transact
             @Param("content") String content,
             @Param("limitDate") java.time.LocalDateTime limitDate
     );
+
     public List<Todo> findByLimitDateBetweenAndStatusAndContentContainingOrderByLimitDateAsc(
             LocalDateTime start,
             LocalDateTime end,
             Integer status,
             String content
     );
+
     public List<Todo> findByLimitDateBetweenAndContentContainingOrderByLimitDateAsc(
             LocalDateTime start,
             LocalDateTime end,

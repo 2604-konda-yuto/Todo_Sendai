@@ -151,8 +151,9 @@ label {
     display: inline-block;
 }
 .todocontent {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 200px;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-all;
+    height: auto;
+    max-width: 400px;
 }

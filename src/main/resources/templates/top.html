@@ -54,7 +54,8 @@
             <td th:text="${content.content}" class="todocontent"></td>
             <td>
                 <div class="status">
-                    <form th:action="@{/status/update/{id}(id=${content.id})}" method="post" th:onsubmit="return confirm('本当に編集しますか？');">
+                    <form th:action="@{/status/update/{id}(id=${content.id})}" method="post"
+                          th:onsubmit="return confirm('本当に編集しますか？');">
                         <input type="hidden" name="id" th:value="${content.id}">
                         <select name="status">
                             <option value="1" th:selected="${content.status == 1}">未着手</option>

@@ -36,4 +36,5 @@ public class Todo {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_date", insertable = false, updatable = false)
     private Date updatedDate;
+
 }

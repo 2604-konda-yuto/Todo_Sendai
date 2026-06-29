@@ -39,13 +39,8 @@ public class TodoController {
     }
 
 
-
-
     @GetMapping("/Filter")
-    public ModelAndView top(@RequestParam(name = "startDate", required = false) String startDate,
-                            @RequestParam(name = "endDate", required = false) String endDate,
-                            @RequestParam(name = "status", required = false) Integer status,
-                            @RequestParam(name = "task", required = false) String task) throws ParseException {
+    public ModelAndView top(@RequestParam(name = "startDate", required = false) String startDate, @RequestParam(name = "endDate", required = false) String endDate, @RequestParam(name = "status", required = false) Integer status, @RequestParam(name = "task", required = false) String task) throws ParseException {
         ModelAndView mav = new ModelAndView();
         // 投稿を全件取得
         List<TodoForm> contents = todoService.findFilterTodo(startDate, endDate, status, task);
@@ -94,11 +89,12 @@ public class TodoController {
             todoerror.add("期限を入力してください");
         } else {
             LocalDate limitDate = LocalDate.parse(todoForm.getLimitDate());
-        if (limitDate.isBefore(LocalDate.now())) {
-            todoerror.add("無効な日付です");
-        }}
+            if (limitDate.isBefore(LocalDate.now())) {
+                todoerror.add("無効な日付です");
+            }
+        }
 
-        if(!todoerror.isEmpty()){
+        if (!todoerror.isEmpty()) {
             ModelAndView mav = new ModelAndView("/new");
             mav.addObject("formModel", todoForm);
             mav.addObject("todoerror", todoerror);
@@ -115,10 +111,7 @@ public class TodoController {
     }
 
     @PostMapping("/status/update/{id}")
-    public ModelAndView updateStatus(
-            @PathVariable("id") Integer id,
-            @RequestParam("status") Integer statusId
-    ) {
+    public ModelAndView updateStatus(@PathVariable("id") Integer id, @RequestParam("status") Integer statusId) {
         todoService.updateStatus(id, statusId);
         return new ModelAndView("redirect:/");
     }
@@ -142,19 +135,16 @@ public class TodoController {
      *編集処理
      */
     @PostMapping("/update/{id}")
-    public ModelAndView updateContent(
-            @PathVariable Integer id,
-            @ModelAttribute("formModel") TodoForm todo,
-            RedirectAttributes redirectAttributes
-    ) {
+    public ModelAndView updateContent(@PathVariable Integer id, @ModelAttribute("formModel") TodoForm todo, RedirectAttributes redirectAttributes) {
         ArrayList<String> todoerror = new ArrayList<>();
         if (todo.getLimitDate() == null || todo.getLimitDate().isBlank()) {
             todoerror.add("期限を入力してください");
-        }else {
+        } else {
             LocalDate limitDate = LocalDate.parse(todo.getLimitDate());
             if (limitDate.isBefore(LocalDate.now())) {
                 todoerror.add("無効な日付です");
-            }}
+            }
+        }
 
 
         if (!StringUtils.hasText(todo.getContent())) {
@@ -166,7 +156,7 @@ public class TodoController {
             todoerror.add("投稿内容は140文字以内で入力してください");
         }
 
-        if(!todoerror.isEmpty()){
+        if (!todoerror.isEmpty()) {
             redirectAttributes.addFlashAttribute("formModel", todo);
             redirectAttributes.addFlashAttribute("todoerror", todoerror);
             return new ModelAndView("redirect:/edit/" + id);
@@ -177,6 +167,7 @@ public class TodoController {
         todoService.updateTodo(todo);
         return new ModelAndView("redirect:/");
     }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ModelAndView handleTypeMismatchException(RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("todoerror", "不正なパラメータです。");
