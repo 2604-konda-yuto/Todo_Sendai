@@ -152,7 +152,7 @@ label {
 }
 .todocontent {
     overflow: visible;
-    white-space: normal;
+    white-space: pre-wrap;
     word-break: break-all;
     height: auto;
     max-width: 400px;
