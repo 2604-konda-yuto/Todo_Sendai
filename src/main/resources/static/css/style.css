@@ -12,6 +12,7 @@ body {
     background-color: #B4CCCC;
     height: 100%;
     width: 80%;
+    min-width: 0;
 }
 
 .footer-contents {

@@ -87,9 +87,9 @@ public class TodoController {
             return mav;
         }
 
-        if (todoForm.getContent().length() > 255) {
+        if (todoForm.getContent().length() > 140) {
             ModelAndView mav = new ModelAndView("/new");
-            mav.addObject("todoerror", "投稿内容は255文字以内で入力してください");
+            mav.addObject("todoerror", "投稿内容は140文字以内で入力してください");
             mav.addObject("formModel", todoForm);
             return mav;
         }
@@ -155,8 +155,8 @@ public class TodoController {
             return new ModelAndView("redirect:/edit/" + id);
         }
 
-        if (todo.getContent().length() > 255) {
-            redirectAttributes.addFlashAttribute("todoerror", "投稿内容は255文字以内で入力してください"); // ★変更
+        if (todo.getContent().length() > 140) {
+            redirectAttributes.addFlashAttribute("todoerror", "投稿内容は140文字以内で入力してください"); // ★変更
             return new ModelAndView("redirect:/edit/" + id);
         }
 
