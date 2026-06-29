@@ -150,3 +150,9 @@ label {
     border-radius: 4px;
     display: inline-block;
 }
+.todocontent {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+}
