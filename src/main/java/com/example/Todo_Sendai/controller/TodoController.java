@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -80,27 +81,29 @@ public class TodoController {
      */
     @PostMapping("/add")
     public ModelAndView addTodo(@ModelAttribute("formModel") TodoForm todoForm) {
+        ArrayList<String> todoerror = new ArrayList<>();
         if (!StringUtils.hasText(todoForm.getContent())) {
-            ModelAndView mav = new ModelAndView("/new");
-            mav.addObject("todoerror", "投稿内容を記入してください");
-            mav.addObject("formModel", todoForm);
-            return mav;
+            todoerror.add("投稿内容を記入してください");
         }
 
         if (todoForm.getContent().length() > 140) {
-            ModelAndView mav = new ModelAndView("/new");
-            mav.addObject("todoerror", "投稿内容は140文字以内で入力してください");
-            mav.addObject("formModel", todoForm);
-            return mav;
+            todoerror.add("投稿内容は140文字以内で入力してください");
         }
 
         if (todoForm.getLimitDate() == null || todoForm.getLimitDate().isBlank()) {
+            todoerror.add("期限を入力してください");
+        } else {
+            LocalDate limitDate = LocalDate.parse(todoForm.getLimitDate());
+        if (limitDate.isBefore(LocalDate.now())) {
+            todoerror.add("無効な日付です");
+        }}
+
+        if(!todoerror.isEmpty()){
             ModelAndView mav = new ModelAndView("/new");
-            mav.addObject("todoerror", "期限を入力してください");
             mav.addObject("formModel", todoForm);
+            mav.addObject("todoerror", todoerror);
             return mav;
         }
-
         todoService.saveTodo(todoForm);
         return new ModelAndView("redirect:/");
     }
@@ -144,21 +147,31 @@ public class TodoController {
             @ModelAttribute("formModel") TodoForm todo,
             RedirectAttributes redirectAttributes
     ) {
-
+        ArrayList<String> todoerror = new ArrayList<>();
         if (todo.getLimitDate() == null || todo.getLimitDate().isBlank()) {
-            redirectAttributes.addFlashAttribute("todoerror", "期限を入力してください"); // ★変更
-            return new ModelAndView("redirect:/edit/" + id);
-        }
+            todoerror.add("期限を入力してください");
+        }else {
+            LocalDate limitDate = LocalDate.parse(todo.getLimitDate());
+            if (limitDate.isBefore(LocalDate.now())) {
+                todoerror.add("無効な日付です");
+            }}
+
 
         if (!StringUtils.hasText(todo.getContent())) {
-            redirectAttributes.addFlashAttribute("todoerror", "投稿内容を記入してください"); // ★変更
-            return new ModelAndView("redirect:/edit/" + id);
+            todoerror.add("投稿内容を記入してください");
+
         }
 
         if (todo.getContent().length() > 140) {
-            redirectAttributes.addFlashAttribute("todoerror", "投稿内容は140文字以内で入力してください"); // ★変更
+            todoerror.add("投稿内容は140文字以内で入力してください");
+        }
+
+        if(!todoerror.isEmpty()){
+            redirectAttributes.addFlashAttribute("formModel", todo);
+            redirectAttributes.addFlashAttribute("todoerror", todoerror);
             return new ModelAndView("redirect:/edit/" + id);
         }
+
 
         todo.setId(id);
         todoService.updateTodo(todo);
