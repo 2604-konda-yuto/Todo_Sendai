@@ -29,7 +29,7 @@
         <select name="status">
             <option value="">▼</option>
             <option value="1" th:selected="${selectedStatus == 1}">未着手</option>
-            <option value="2" th:selected="${selectedStatus == 2}">進行中</option>
+            <option value="2" th:selected="${selectedStatus == 2}">実行中</option>
             <option value="3" th:selected="${selectedStatus == 3}">ステイ中</option>
             <option value="4" th:selected="${selectedStatus == 4}">完了</option>
         </select>
@@ -58,7 +58,7 @@
                         <input type="hidden" name="id" th:value="${content.id}">
                         <select name="status">
                             <option value="1" th:selected="${content.status == 1}">未着手</option>
-                            <option value="2" th:selected="${content.status == 2}">進行中</option>
+                            <option value="2" th:selected="${content.status == 2}">実行中</option>
                             <option value="3" th:selected="${content.status == 3}">ステイ中</option>
                             <option value="4" th:selected="${content.status == 4}">完了</option>
                         </select>
