@@ -26,14 +26,18 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> { @Transact
             @Param("content") String content,
             @Param("limitDate") java.time.LocalDateTime limitDate
     );
-    public List<Todo> findByLimitDateBetweenAndStatusAndContentContaining
-            (LocalDateTime start, LocalDateTime end,
-             Integer status, String content);
-    public List<Todo> findByLimitDateBetweenAndContentContaining(
+    public List<Todo> findByLimitDateBetweenAndStatusAndContentContainingOrderByLimitDateAsc(
+            LocalDateTime start,
+            LocalDateTime end,
+            Integer status,
+            String content
+    );
+    public List<Todo> findByLimitDateBetweenAndContentContainingOrderByLimitDateAsc(
             LocalDateTime start,
             LocalDateTime end,
             String content
     );
 
     List<Todo> findAllByOrderByLimitDateAsc();
+
 }

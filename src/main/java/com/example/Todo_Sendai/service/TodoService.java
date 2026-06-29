@@ -123,9 +123,9 @@ public class TodoService {
         List<Todo> results;
 
         if (status != null) {
-            results = todoRepository.findByLimitDateBetweenAndStatusAndContentContaining(start, end, status, task);
+            results = todoRepository.findByLimitDateBetweenAndStatusAndContentContainingOrderByLimitDateAsc(start, end, status, task);
         } else {
-            results = todoRepository.findByLimitDateBetweenAndContentContaining(start, end, task);
+            results = todoRepository.findByLimitDateBetweenAndContentContainingOrderByLimitDateAsc(start, end, task);
         }
         List<TodoForm> todo = setTodoForm(results);
         return todo;
