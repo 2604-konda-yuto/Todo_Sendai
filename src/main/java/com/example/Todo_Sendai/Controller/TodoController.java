@@ -78,15 +78,15 @@ public class TodoController {
     public ModelAndView addTodo(@ModelAttribute("formModel") TodoForm todoForm) {
         ArrayList<String> todoerror = new ArrayList<>();
         if (!StringUtils.hasText(todoForm.getContent())) {
-            todoerror.add("投稿内容を記入してください");
+            todoerror.add("タスクを入力してください");
         }
 
         if (todoForm.getContent().length() > 140) {
-            todoerror.add("投稿内容は140文字以内で入力してください");
+            todoerror.add("タスクは140文字以内で入力してください");
         }
 
         if (todoForm.getLimitDate() == null || todoForm.getLimitDate().isBlank()) {
-            todoerror.add("期限を入力してください");
+            todoerror.add("期限を設定してください");
         } else {
             LocalDate limitDate = LocalDate.parse(todoForm.getLimitDate());
             if (limitDate.isBefore(LocalDate.now())) {
@@ -138,7 +138,7 @@ public class TodoController {
     public ModelAndView updateContent(@PathVariable Integer id, @ModelAttribute("formModel") TodoForm todo, RedirectAttributes redirectAttributes) {
         ArrayList<String> todoerror = new ArrayList<>();
         if (todo.getLimitDate() == null || todo.getLimitDate().isBlank()) {
-            todoerror.add("期限を入力してください");
+            todoerror.add("期限を設定してください");
         } else {
             LocalDate limitDate = LocalDate.parse(todo.getLimitDate());
             if (limitDate.isBefore(LocalDate.now())) {
@@ -148,12 +148,12 @@ public class TodoController {
 
 
         if (!StringUtils.hasText(todo.getContent())) {
-            todoerror.add("投稿内容を記入してください");
+            todoerror.add("タスクを入力してください");
 
         }
 
         if (todo.getContent().length() > 140) {
-            todoerror.add("投稿内容は140文字以内で入力してください");
+            todoerror.add("タスクは140文字以内で入力してください");
         }
 
         if (!todoerror.isEmpty()) {
