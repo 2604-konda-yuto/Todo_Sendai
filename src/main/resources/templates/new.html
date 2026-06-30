@@ -10,7 +10,9 @@
     <h2>タスク追加</h2>
 </div>
 <div th:if="${todoerror}" class="errorMsessage">
-    <p th:text="${todoerror}"></p>
+    <ul>
+        <li th:each="err : ${todoerror}" th:text="${err}"></li>
+    </ul>
 </div>
 <div class="main-contents">
     <form method="post" action="/add" th:object="${formModel}">
@@ -24,9 +26,7 @@
     </form>
 </div>
 <div class="footer-contents">
-    <form action="/">
-        <input type="submit" value="戻る"/>
-    </form>
+    <a href="/">戻る</a>
 </div>
 </body>
 </html>

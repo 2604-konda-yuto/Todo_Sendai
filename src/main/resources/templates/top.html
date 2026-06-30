@@ -10,7 +10,9 @@
     <h1>ToDo</h1>
 </div>
 <div th:if="${todoerror}" class="errorMsessage">
-    <p th:text="${todoerror}"></p>
+    <ul>
+        <li th:each="err : ${todoerror}" th:text="${err}"></li>
+    </ul>
 </div>
 <div class="today-area">
     本日の日付：<span th:text="${#temporals.format(today, 'yyyy/MM/dd')}"></span>
